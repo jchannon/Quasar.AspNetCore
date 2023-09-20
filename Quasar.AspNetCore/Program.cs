@@ -7,7 +7,7 @@ builder.Services.AddViteServices(new ViteOptions()
 {
     Server = new ViteServerOptions()
     {
-        Port = 4000
+        Port = 9000
     }
 });
 
