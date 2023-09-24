@@ -51,6 +51,17 @@ import EssentialLink, { EssentialLinkProps } from 'components/EssentialLink.vue'
 
 const essentialLinks: EssentialLinkProps[] = [
   {
+    title: 'Home',
+    icon: 'home',
+    link: '/'
+  },
+  {
+    title: 'Profile',
+    caption: 'Your Profile',
+    icon: 'profile',
+    link: '/profile'
+  },
+  {
     title: 'Docs',
     caption: 'quasar.dev',
     icon: 'school',
