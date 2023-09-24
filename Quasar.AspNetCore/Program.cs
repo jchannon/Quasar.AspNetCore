@@ -39,8 +39,8 @@ app.UseSerilogRequestLogging(cf => cf.Logger = logger);
 app.UseStaticFiles();
 app.MapGet("/api/profile", () => new
 {
-    Name = "my email",
-    Email = "john"
+    Name = "john",
+    Email = "john@smith.com"
 });
 
 
