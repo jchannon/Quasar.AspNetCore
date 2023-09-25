@@ -6,7 +6,9 @@ const routes: RouteRecordRaw[] = [
     component: () => import('layouts/MainLayout.vue'),
     children: [
       { path: '', component: () => import('pages/IndexPage.vue') },
-      { path: '/profile', component: () => import('pages/ProfilePage.vue') }
+      { path: '/profile', component: () => import('pages/ProfilePage.vue') },
+      { path: '/404', component: () => import('pages/ErrorNotFound.vue') },
+      { path: '/403', component: () => import('pages/ForbiddenPage.vue') }
     ],
   },
 
@@ -17,5 +19,6 @@ const routes: RouteRecordRaw[] = [
     component: () => import('pages/ErrorNotFound.vue'),
   },
 ];
+
 
 export default routes;

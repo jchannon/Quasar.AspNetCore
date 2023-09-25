@@ -58,8 +58,20 @@ const essentialLinks: EssentialLinkProps[] = [
   {
     title: 'Profile',
     caption: 'Your Profile',
-    icon: 'profile',
+    icon: 'account_circle',
     link: '/profile'
+  },
+  {
+    title: 'Login',
+    caption: 'Login',
+    icon: 'login',
+    link: '/api/login?redirecturi=/'
+  },
+  {
+    title: 'Logout',
+    caption: 'Logout',
+    icon: 'logout',
+    link: '/api/logout'
   },
   {
     title: 'Docs',
