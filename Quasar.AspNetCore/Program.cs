@@ -55,23 +55,44 @@ builder.Services.AddViteServices(new ViteOptions()
 var app = builder.Build();
 
 
+app.UseSerilogRequestLogging(cf => cf.Logger = logger);
+
+app.UseStaticFiles();
+
 if (app.Environment.IsDevelopment())
 {
     // Enable the Middleware to use the Vite Development Server.
     app.UseViteDevMiddleware();
 }
 
-app.UseSerilogRequestLogging(cf => cf.Logger = logger);
+app.Map("/installer-portal", builder =>
+{
+	app.UseCookiePolicy(new CookiePolicyOptions()
+	{
+	    Secure = CookieSecurePolicy.Always,
+	    HttpOnly = HttpOnlyPolicy.Always,
+	    MinimumSameSitePolicy = SameSiteMode.None
+	});
 
-app.UseStaticFiles();
+    builder.UseStaticFiles();
+    
+    if (app.Environment.IsDevelopment())
+    {
+        // Enable the Middleware to use the Vite Development Server.
+        app.UseViteDevMiddleware();
+    }
+
+});
+
+app.UseAuthentication();
+app.UseAuthorization();
+
 app.UseCookiePolicy(new CookiePolicyOptions()
 {
     Secure = CookieSecurePolicy.Always,
     HttpOnly = HttpOnlyPolicy.Always,
     MinimumSameSitePolicy = SameSiteMode.None
 });
-app.UseAuthentication();
-app.UseAuthorization();
 
 app.MapGet("/api/login", async (HttpContext context, string redirectUri) =>
 {
@@ -79,7 +100,6 @@ app.MapGet("/api/login", async (HttpContext context, string redirectUri) =>
         .WithRedirectUri(redirectUri)
         .Build();
 
-    
     await context.ChallengeAsync(Auth0Constants.AuthenticationScheme, authenticationProperties);
 });
 
@@ -88,28 +108,26 @@ app.MapGet("/api/logout", async (HttpContext context) =>
     var authenticationProperties = new LogoutAuthenticationPropertiesBuilder()
         .WithRedirectUri("/")
         .Build();
-        
 
     await context.SignOutAsync(Auth0Constants.AuthenticationScheme, authenticationProperties);
     await context.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
 });
 
 app.MapGet("/api/profile", (HttpContext context) =>
-{
-    var number = rnd.NextDouble();
-    if (number >= 0.5)
     {
-        return Results.Ok(new
+        var number = rnd.NextDouble();
+        if (number >= 0.5)
         {
-            Name = context.User.Identity.Name,
-            Email = "john@smith.com"
-        });
-    }
+            return Results.Ok(new
+            {
+                Name = context.User.Identity.Name,
+                Email = "john@smith.com"
+            });
+        }
 
-    return Results.StatusCode(403);
-})
-    .RequireAuthorization()
-    ;
+        return Results.StatusCode(403);
+    })
+    .RequireAuthorization();
 
 
 app.Run();
