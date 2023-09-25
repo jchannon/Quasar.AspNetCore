@@ -1,6 +1,7 @@
 using Auth0.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.CookiePolicy;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Serilog;
 using Serilog.Events;
@@ -63,10 +64,12 @@ if (app.Environment.IsDevelopment())
 app.UseSerilogRequestLogging(cf => cf.Logger = logger);
 
 app.UseStaticFiles();
-// app.UseCookiePolicy(new CookiePolicyOptions()
-// {
-//     MinimumSameSitePolicy = SameSiteMode.Lax
-// });
+app.UseCookiePolicy(new CookiePolicyOptions()
+{
+    Secure = CookieSecurePolicy.Always,
+    HttpOnly = HttpOnlyPolicy.Always,
+    MinimumSameSitePolicy = SameSiteMode.None
+});
 app.UseAuthentication();
 app.UseAuthorization();
 
