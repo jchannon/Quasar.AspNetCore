@@ -54,10 +54,7 @@ builder.Services.AddViteServices(new ViteOptions()
 
 var app = builder.Build();
 
-
 app.UseSerilogRequestLogging(cf => cf.Logger = logger);
-
-app.UseStaticFiles();
 
 if (app.Environment.IsDevelopment())
 {
